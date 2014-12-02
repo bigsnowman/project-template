@@ -1,69 +1,97 @@
 
-title('Project-Breakout');
+title('Project - Breakout');
 
 // Variables
-// Bar Coordinates
-var xCoord = 0;
-var yCoord = 0;
-// Ball Coordinates
-var xBallCoord = 0;
-var yBallCoord = 0;
-// Speed
-var speed = 5;
-// Boundries
-var rBound = 400;
-var lBound = 400;
+var xCoord = 100;
+var yCoord = 350
+var xSpeed = 0.5;
+var ySpeed = 2.50;
+var leftB = 5;
+var rightB = 395;
+var topB = 5;
+var barX = 100;
+var barY = 380;
+var blocknum = 40;
+var aliveB = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // (40 here)
+var blockW = 400 / blocknum;
+var blockH = 10;
 
 // This code is executed once when the program is started
 var setup = function()
 {
+    // Set the stroke
+    noStroke();
     // set up the size of the canvas
-    size(400,400);
+    size(400,400);    
 };
 
 // Override draw function, by default it will be called 60 times per second
 var draw = function()
 {
     // Clear the screen
-    background(255, 255, 255);
+    background(16, 16, 16);
 
-    // Fill the objects
-    fill(68, 166, 1);
-
-    // Draw the moving bar
-    rect(xCoord + 200, yCoord + 370, 45, 8);
+    // Draw the bar
+    rect(barX, barY, 45, 10);
     
     // Make the bar move
-    // Left
     if(keyIsPressed && keyCode === RIGHT)
     {
-    xCoord += 5;
-    };
-    // Right
+	barX = barX + 5;
+    }
     if(keyIsPressed && keyCode === LEFT)
     {
-    xCoord -= 5;
-    };
+	barX = barX - 5;
+    }
 
-    // Make the bar tele if it moves off of screen
-  //if()
-  //{
-    
-  //}
-  //if()
-  //{
-    
-  //}
-
-    // The ball
-    ellipse(xBallCoord, yBallCoord, 10, 10);
-    
-    // Make the ball move
-    yBallCoord = yBallCoord + 2;
-    if(yBallCoord >)
+    // Make the bar move to the other side when it moves off the edge
+    if(barX > 400)
     {
-    
-    };
+	barX = 0;
+    }
+    if(barX < -40)
+    {
+	barX = 360;
+    }
 
-//Call the functions;
+    // Draw the ball
+    fill(68, 166, 1);
+    ellipse(xCoord, yCoord, 10, 10);
 
+    // Make the ball move
+    xCoord = xCoord + xSpeed;
+    yCoord = yCoord + ySpeed;
+
+    // The Boundries For The ball's X Coordinate
+    if(xCoord > rightB)
+    {
+	xSpeed = -2.5 - Math.random() * 2.5;
+    }
+    if(xCoord < leftB)
+    {
+	xSpeed = 2.5 + Math.random() * 2.5;
+    }
+
+    // The boundries for the ball's Y coordinate
+    if(yCoord < topB)
+    {
+	ySpeed = 2.5 + Math.random() * 2.5;
+    }
+
+    // Make the ball bounce off the bar
+    if(yCoord > barY && xCoord > barX && xCoord < barX + 45)
+    {
+	ySpeed = ySpeed * -1;
+    }
+
+    // Now da blocks
+    for(var i = 0; i < aliveB.length; i++)
+    {
+	if(aliveB[i] === 0)
+	{
+	    fill(68, 166, 1);
+	    stroke(0,0,0);
+	    rect(i * blockW, 0, blockW, blockH);
+	}
+    }
+};
